@@ -1,0 +1,100 @@
+@extends('layout.index')
+@section('TitleTab', 'List Info Asisten')
+@section('Title', 'List Info Asisten')
+@section('breadcrumb')
+<li class="breadcrumb-item"><a href="{{ route('dashboardApp') }}">Dashboard App</a></li>
+<li class="breadcrumb-item"><a href="{{ route('dashboardIncomingChargeback') }}">Hold Incoming Chargeback</a></li>
+<li class="breadcrumb-item active">List Info Asisten</li>
+@endsection
+
+@section('content')
+<div class="row">
+    <div class="col-lg-12 col-xl-12">
+        <?php if($alert): ?>
+        <div class="card m-b-30">
+            <div class="card-body">
+                <?= $alert ?>
+            </div>
+        </div>
+        <?php endif;?>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="form-material">
+                    <div class="row mb-4">
+                        <div class="col-md-3 text-right">
+                            <button href="#" class="btn btn-primary" data-toggle="modal" data-animation="bounce" data-target=".formAddInfoAsisten">
+                                <i class="dripicons-plus"></i>&nbsp;&nbsp;Form Add Info Asisten
+                            </button>
+                        </div>
+                        <div class="col-md-2 text-left">
+                            <form action="{{ route('deleteInfoAsisten') }}" method="POST">
+                                {{ csrf_field() }}
+                                {{ method_field('DELETE') }}
+                                <button type="submit" class="btn btn-danger" style="width: 180px; height: 38px;">
+                                    <i class="dripicons-trash"></i>&nbsp;&nbsp;Delete Data
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-3 text-right">
+                            <a type="button" class="btn btn-dark btn-square btn-outline-dashed waves-effect waves-light" href="../../Excel/HoldIncomingChargeback/Format Info Asisten.xlsx"><i class="dripicons-cloud-download mr-2"></i>Download Format</a>
+                        </div>
+                        <div class="col-md-4 text-left">
+                            <button href="#" class="btn btn-primary" data-toggle="modal" data-animation="bounce" data-target=".formUploadInfoAsisten">
+                                <i class="dripicons-cloud-upload"></i>&nbsp;&nbsp;Form Upload Info Asisten
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="mt-4 mb-4">
+
+                <div class="card-body">
+                    <table id="datatable" class="table table-bordered dt-responsive" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width: 5%;">No</th>
+                                <th style="width: 15%;">Proses Incoming</th>
+                                <th style="width: 15%;">Info Status</th>
+                                <th style="width: 15%;">Proses RKM 1</th>
+                                <th style="width: 15%;">Final Status</th>
+                                <th class="text-center" style="width: 10%;">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <?php
+                                $no = 1;
+                                foreach($InfoAsisten as $list){
+                                    $button = "
+                                    <a href='".route('formUpdateInfoAsisten', ['id' => $list->id])."' class='btn btn-outline-success' data-toggle='tooltip' data-placement='top' title='' data-original-title='Edit'>
+                                        <i class='fas fa-pencil-alt'></i>
+                                    </a> |
+                                    <a href='".route('deleteInfoAsistenById', ['id' => $list->id])."' class='btn btn-outline-danger' data-toggle='tooltip' data-placement='top' title='' data-original-title='Hapus'>
+                                        <i class='fas fa-trash-alt'></i>
+                                    </a>";
+                                    echo "
+                                        <tr>
+                                            <td class='text-center'>$no</td>
+                                            <td>$list->proses_incoming</td>
+                                            <td>$list->info_status</td>
+                                            <td>$list->proses_rkm_1</td>
+                                            <td>$list->final_status</td>
+                                            <td class='text-center'>$button</td>
+                                        </tr>
+                                    ";
+                                    $no++;
+                                }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+@endsection
